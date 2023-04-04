@@ -1,9 +1,13 @@
 package personal.board.dto;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import personal.board.domain.board.Board;
 import personal.board.domain.member.Member;
 
+@Getter
+@NoArgsConstructor
 public class BoardCreateRequestDto {
     private Member member;
     private String title;
