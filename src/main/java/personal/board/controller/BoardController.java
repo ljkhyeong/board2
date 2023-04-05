@@ -35,4 +35,9 @@ public class BoardController {
     public List<BoardListResponseDto> searchAll() {
         return boardService.searchAll();
     }
+
+    @DeleteMapping("/board/{id}")
+    public void delete(@PathVariable Long id) {
+        boardService.delete(id);
+    }
 }
