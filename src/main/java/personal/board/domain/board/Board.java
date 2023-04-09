@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import personal.board.domain.BaseTimeEntity;
 import personal.board.domain.member.Member;
+import personal.board.dto.BoardDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;

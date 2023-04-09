@@ -1,5 +1,6 @@
 package personal.board.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,6 +33,7 @@ public class BoardRepositoryImpl implements CustomBoardRepository {
         Long count = jpaQueryFactory
                 .select(board.count())
                 .from(board)
+                .where(containsSearch(searchVal))
                 .fetchOne();
         return count;
     }
@@ -48,12 +50,17 @@ public class BoardRepositoryImpl implements CustomBoardRepository {
                         , member.name))
                 .from(board)
                 .leftJoin(board.member, member)
+                .where(containsSearch(searchVal))
                 .orderBy(board.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
         return content;
 
+    }
+
+    private BooleanExpression containsSearch(String searchVal) {
+        return searchVal != null ? board.title.contains(searchVal) : null;
     }
 
 

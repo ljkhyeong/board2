@@ -1,17 +1,15 @@
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/default_layout">
 <div layout:fragment="content" class="content">
-    <nav class="container">
-        <br>
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="제목을 입력해주세요.">
-            <button type="submit" class="btn btn-secondary">검색</button>
-        </div>
-        <br>
-        <form>
+    <form th:action th:object="${form}" method="get">
+        <nav class="container">
+            <br>
+            <div class="input-group">
+                <input type="text" name="searchVal" th:value="${searchVal}" class="form-control" placeholder="제목을 입력해주세요.">
+                <button type="submit" class="btn btn-secondary">검색</button>
+            </div>
+            <br>
             <table class="table table-hover">
                 <colgroup>
                     <col width="2%" />
@@ -59,39 +57,39 @@
             <br>
             <nav class="container d-flex align-items-center justify-content-center" aria-label="Page navigation example"
                  th:with="start=${(list.number/maxPage)*maxPage + 1},
-                  end=(${(list.totalPages == 0) ? 1 : (start + (maxPage - 1) < list.totalPages ? start + (maxPage - 1) : list.totalPages)})">
+                      end=(${(list.totalPages == 0) ? 1 : (start + (maxPage - 1) < list.totalPages ? start + (maxPage - 1) : list.totalPages)})">
                 <ul class="pagination">
 
                     <li th:if="${start > 1}" class="page-item">
-                        <a th:href="@{/?(page=0)}" class="page-link" href="#" aria-label="Previous">
+                        <a th:href="@{/?(page=0, searchVal=${searchVal})}" class="page-link" href="#" aria-label="Previous">
                             <span aria-hidden="true">&laquo;&laquo;</span>
                         </a>
                     </li>
 
                     <li th:if="${start > 1}" class="page-item">
-                        <a th:href="@{/?(page=${start - maxPage-1})}" class="page-link" href="#" aria-label="Previous">
+                        <a th:href="@{/?(page=${start - maxPage-1}, searchVal=${searchVal})}" class="page-link" href="#" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
 
                     <li th:each="page: ${#numbers.sequence(start, end)}" class="page-item" th:classappend="${list.number+1 == page} ? active">
-                        <a th:href="@{/?(page=${page-1})}" th:text="${page}" class="page-link" href="#">1</a>
+                        <a th:href="@{/?(page=${page-1}, searchVal=${searchVal})}" th:text="${page}" class="page-link" href="#">1</a>
                     </li>
 
                     <li th:if="${end < list.totalPages}" class="page-item">
-                        <a th:href="@{/?(page=${start + maxPage -1})}" class="page-link" href="#" aria-label="Next">
+                        <a th:href="@{/?(page=${start + maxPage -1}, searchVal=${searchVal})}" class="page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
 
                     <li th:if="${end < list.totalPages}" class="page-item">
-                        <a th:href="@{/?(page=${list.totalPages-1})}" class="page-link" href="#" aria-label="Next">
+                        <a th:href="@{/?(page=${list.totalPages-1}, searchVal=${searchVal})}" class="page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;&raquo;</span>
                         </a>
                     </li>
                 </ul>
             </nav>
-        </form>
-    </nav>
+        </nav>
+    </form>
 </div>
 </html>

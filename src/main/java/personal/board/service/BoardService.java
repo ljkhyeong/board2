@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import personal.board.domain.board.Board;
+import personal.board.domain.member.Member;
+import personal.board.dto.*;
 import personal.board.repository.BoardRepository;
-import personal.board.dto.BoardCreateRequestDto;
-import personal.board.dto.BoardListResponseDto;
-import personal.board.dto.BoardResponseDto;
-import personal.board.dto.BoardUpdateRequestDto;
+import personal.board.repository.MemberRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,35 +16,24 @@ import java.util.stream.Collectors;
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
-    public Long create(BoardCreateRequestDto requestDto) {
-        return boardRepository.save(requestDto.toEntity()).getId();
-    }
+    public Long saveBoard(BoardDto boardDto) {
+        List<Member> memberList = memberRepository.findAll();
+        Member member = memberList.get(0);
+        Board board = null;
 
-    @Transactional
-    public Long update(Long id, BoardUpdateRequestDto requestDto) {
-        Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+        if (boardDto.getId() == null) {
+            board = boardDto.toEntity(member);
+            boardRepository.save(board);
+        } else {
+            board = boardRepository.findById(boardDto.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다"));
+            board.update(boardDto.getTitle(), boardDto.getContent());
+        }
 
-        board.update(requestDto.getTitle(), requestDto.getContent());
-
-        return id;
-    }
-
-    @Transactional(readOnly = true)
-    public BoardResponseDto searchById(Long id) {
-        Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
-
-        return new BoardResponseDto(board);
-    }
-
-    @Transactional
-    public List<BoardListResponseDto> searchAll() {
-        return boardRepository.findAll().stream()
-                .map(BoardListResponseDto::new)
-                .collect(Collectors.toList());
+        return board.getId();
     }
 
     @Transactional
