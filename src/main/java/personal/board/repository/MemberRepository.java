@@ -1,4 +1,4 @@
-package personal.board.domain.member;
+package personal.board.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import personal.board.domain.member.Member;

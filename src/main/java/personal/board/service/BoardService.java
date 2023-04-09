@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import personal.board.domain.board.Board;
-import personal.board.domain.board.BoardRepository;
+import personal.board.repository.BoardRepository;
 import personal.board.dto.BoardCreateRequestDto;
 import personal.board.dto.BoardListResponseDto;
 import personal.board.dto.BoardResponseDto;
@@ -55,4 +55,6 @@ public class BoardService {
 
         boardRepository.delete(board);
     }
+
+
 }

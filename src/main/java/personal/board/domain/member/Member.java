@@ -12,34 +12,28 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "member")
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id", unique = true, nullable = false)
+    @Column(name = "member_id")
     private Long id;
 
-    @Column(length = 20, nullable = false)
     private String name;
-
-    @Column(length = 50, nullable = false)
     private String password;
-
-    @Column(length = 40, nullable = false)
     private String email;
-
-    @Column(length = 40, nullable = false)
     private String contact;
+    private int age;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "member")
     private List<Board> board = new ArrayList<>();
 
     @Builder
-    public Member(String name, String password, String email, String contact) {
+    public Member(String name, String password, String email, String contact, int age) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.contact = contact;
+        this.age = age;
     }
 }

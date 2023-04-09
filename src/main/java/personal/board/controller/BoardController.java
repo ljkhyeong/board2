@@ -1,11 +1,14 @@
 package personal.board.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import personal.board.dto.BoardCreateRequestDto;
-import personal.board.dto.BoardListResponseDto;
-import personal.board.dto.BoardResponseDto;
-import personal.board.dto.BoardUpdateRequestDto;
+import org.springframework.web.multipart.MultipartFile;
+import personal.board.domain.member.Member;
+import personal.board.dto.*;
+import personal.board.repository.CustomBoardRepository;
 import personal.board.service.BoardService;
 
 import java.util.List;
@@ -14,30 +17,31 @@ import java.util.List;
 @RestController
 public class BoardController {
 
-    private final BoardService boardService;
+    private final CustomBoardRepository customBoardRepository;
 
-    @PostMapping("/board")
-    public Long create(@RequestBody BoardCreateRequestDto requestDto) {
-        return boardService.create(requestDto);
+    @GetMapping("/")
+    public String list(String searchVal, Pageable pageable, Model model){
+        Page<BoardDto> results = customBoardRepository.selectBoardList(searchVal, pageable);
+        model.addAttribute("list", results);
+        model.addAttribute("maxPage", 5);
+        pageModelPut(results, model);
+        return "board/list";
     }
 
-    @PutMapping("/board/{id}")
-    public Long update(@PathVariable Long id, @RequestBody BoardUpdateRequestDto requestDto) {
-        return boardService.update(id, requestDto);
+    private void pageModelPut(Page<BoardDto> results, Model model){
+        model.addAttribute("totalCount", results.getTotalElements());
+        model.addAttribute("size",  results.getPageable().getPageSize());
+        model.addAttribute("number",  results.getPageable().getPageNumber());
     }
 
-    @GetMapping("/board/{id}")
-    public BoardResponseDto searchById(@PathVariable Long id) {
-        return boardService.searchById(id);
+    @GetMapping("/write")
+    public String write(){
+        return "board/write";
     }
 
-    @GetMapping("/board")
-    public List<BoardListResponseDto> searchAll() {
-        return boardService.searchAll();
+    @GetMapping("/update")
+    public String update(){
+        return "board/update";
     }
 
-    @DeleteMapping("/board/{id}")
-    public void delete(@PathVariable Long id) {
-        boardService.delete(id);
-    }
 }
