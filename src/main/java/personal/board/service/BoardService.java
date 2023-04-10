@@ -18,6 +18,10 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
+    public Board selectBoardDetail(Long id) {
+        return boardRepository.findById(id).get();
+    }
+
     @Transactional
     public Long saveBoard(BoardDto boardDto) {
         List<Member> memberList = memberRepository.findAll();
