@@ -60,6 +60,7 @@ public class BoardController {
     @GetMapping("/update/{boardId}")
     public String detail(@PathVariable Long boardId, Model model) {
         Board board = boardService.selectBoardDetail(boardId);
+
         BoardDto boardDto = new BoardDto();
         boardDto.setId(boardId);
         boardDto.setTitle(board.getTitle());
@@ -90,5 +91,8 @@ public class BoardController {
 
         return "redirect:/";
     }
+
+
+
 
 }

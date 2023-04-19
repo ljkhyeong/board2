@@ -51,5 +51,10 @@ public class Board extends BaseTimeEntity {
         this.viewCount = 0L;
     }
 
+    public Board updateViewCount(Long viewCount) {
+        this.viewCount = viewCount + 1;
+        return this;
+    }
+
 
 }

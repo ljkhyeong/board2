@@ -18,8 +18,11 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public Board selectBoardDetail(Long id) {
-        return boardRepository.findById(id).get();
+        Board board = boardRepository.findById(id).get();
+        board.updateViewCount(board.getViewCount());
+        return board;
     }
 
     @Transactional
@@ -47,6 +50,8 @@ public class BoardService {
 
         boardRepository.delete(board);
     }
+
+
 
 
 }
